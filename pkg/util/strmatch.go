@@ -17,6 +17,7 @@ limitations under the License.
 package util
 
 import (
+	"regexp"
 	"strings"
 )
 
@@ -52,4 +53,9 @@ func MatchIgnoredCase(keys []string, s string) bool {
 		}
 	}
 	return false
+}
+
+func MatchRegex(rx, s string) bool {
+	r, _ := regexp.Compile(rx)
+	return r.MatchString(s)
 }
