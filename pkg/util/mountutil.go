@@ -77,7 +77,9 @@ func (m MountUtil) getPartitionName() (string, error) {
 			/dev/sda4 /var/lib/docker/aufs ext4 rw,relatime,errors=remount-ro,data=ordered 0 0
 			1st entry is partition or file system 2nd is mount point
 		*/
-		if parts := strings.Split(line, " "); parts[1] == m.MountPoint {
+		if parts := strings.Split(line, " "); parts[1] == m.MountPoint &&
+			// only if /dev prefix, otherwise it can be filesystem
+			strings.HasPrefix(parts[0], "/dev") {
 			// /dev/ by default added with partition name we want to get only sda1 / sdc2 ..
 			return strings.Replace(parts[0], "/dev/", "", 1), nil
 		}
