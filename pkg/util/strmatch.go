@@ -55,9 +55,9 @@ func MatchIgnoredCase(keys []string, s string) bool {
 	return false
 }
 
-// MatchRegex is a utility function which returns true if the string -s
+// IsMatchRegex is a utility function which returns true if the string -s
 // matches with the regex specified.
-func MatchRegex(regex, s string) bool {
+func IsMatchRegex(regex, s string) bool {
 	r := regexp.MustCompile(regex)
 	return r.MatchString(s)
 }
