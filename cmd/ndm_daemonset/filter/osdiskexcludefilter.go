@@ -21,6 +21,7 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/openebs/node-disk-manager/cmd/ndm_daemonset/controller"
+	"github.com/openebs/node-disk-manager/pkg/mount"
 	"github.com/openebs/node-disk-manager/pkg/util"
 )
 
@@ -31,7 +32,7 @@ const (
 var (
 	defaultMountFilePath     = "/proc/self/mounts"
 	mountPoints              = []string{"/", "/etc/hosts"}
-	hostMountFilePath        = "/host/mounts"           // hostMountFilePath is the file path mounted inside container
+	hostMountFilePath        = "/host/proc/1/mounts"    // hostMountFilePath is the file path mounted inside container
 	oSDiskExcludeFilterName  = "os disk exclude filter" // filter name
 	oSDiskExcludeFilterState = defaultEnabled           // filter state
 )
@@ -84,7 +85,7 @@ func (odf *oSDiskExcludeFilter) Start() {
 		it adds it in Controller struct and make isOsDiskFilterSet true
 	*/
 	for _, mountPoint := range mountPoints {
-		mountPointUtil := util.NewMountUtil(hostMountFilePath, mountPoint)
+		mountPointUtil := mount.NewMountUtil(hostMountFilePath, "", mountPoint)
 		if devPath, err := mountPointUtil.GetDiskPath(); err != nil {
 			glog.Error(err)
 		} else {
@@ -97,7 +98,7 @@ func (odf *oSDiskExcludeFilter) Start() {
 		disk's path of it adds it in Controller struct and make isOsDiskFilterSet true
 	*/
 	for _, mountPoint := range mountPoints {
-		mountPointUtil := util.NewMountUtil(defaultMountFilePath, mountPoint)
+		mountPointUtil := mount.NewMountUtil(defaultMountFilePath, "", mountPoint)
 		if devPath, err := mountPointUtil.GetDiskPath(); err != nil {
 			glog.Error(err)
 		} else {
@@ -113,7 +114,7 @@ func (odf *oSDiskExcludeFilter) Include(d *controller.DiskInfo) bool {
 	return true
 }
 
-// Exclude returns true if disk devpath does not match with excludeDevPath
+// Exclude returns true if disk devpath matches with excludeDevPath
 func (odf *oSDiskExcludeFilter) Exclude(d *controller.DiskInfo) bool {
 	// The partitionRegex is chosen depending on whether the device uses
 	// the p[0-9] partition naming structure or not.
