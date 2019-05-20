@@ -55,6 +55,16 @@ func MatchIgnoredCase(keys []string, s string) bool {
 	return false
 }
 
+// RemoveString removes all occurrences of a string from slice
+func RemoveString(slice []string, s string) (result []string) {
+	for _, item := range slice {
+		if item != s {
+			result = append(result, item)
+		}
+	}
+	return result
+}
+
 // IsMatchRegex is a utility function which returns true if the string -s
 // matches with the regex specified.
 func IsMatchRegex(regex, s string) bool {
