@@ -141,3 +141,23 @@ jobs:
           platforms: linux/amd64, linux/arm64, linux/arm/v7, linux/ppc64le
           tags: |
             openebs/node-disk-operator:ci
+
+  integration-test:
+    runs-on: ubuntu-latest
+    # ndm exporter is not needed here as the integration tests do not use exporter
+    needs: ['ndm-daemonset', 'ndm-operator']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Minikube-Kubernetes
+        uses: manusa/actions-setup-minikube@v2.3.0
+        with:
+          minikube version: v1.15.0
+          kubernetes version: 1.18.0
+
+      - name: Install Dependencies
+        run: make install-dep
+
+      - name: Integration Test
+        run: sudo -E env "PATH=$PATH" make integration-test
