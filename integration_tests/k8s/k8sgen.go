@@ -38,7 +38,7 @@ const (
 	BlockDeviceCRDYAML      NDMYaml = "../../deploy/crds/openebs.io_blockdevices_crd.yaml"
 	BlockDeviceClaimCRDYAML NDMYaml = "../../deploy/crds/openebs.io_blockdeviceclaims_crd.yaml"
 	DaemonSetYAML           NDMYaml = "../yamls/node-disk-manager.yaml"
-	DeploymentYAML          NDMYaml = "../../deploy/yamls/node-disk-operator.yaml"
+	DeploymentYAML          NDMYaml = "../yamls/node-disk-operator.yaml"
 	OpenEBSNamespaceYAML    NDMYaml = "../../deploy/yamls/namespace.yaml"
 )
 
