@@ -23,7 +23,7 @@ spec:
         ports:
         - containerPort: 8080
           name: liveness
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Never
         readinessProbe:
           exec:
             command:

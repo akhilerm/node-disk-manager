@@ -37,7 +37,7 @@ spec:
         # Default address is 0.0.0.0:9115, do not use quotes around the address
         # - --api-service-address=0.0.0.0:9115
         # - --feature-gates="UseOSDisk"
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Never
         securityContext:
           privileged: true
         volumeMounts:
