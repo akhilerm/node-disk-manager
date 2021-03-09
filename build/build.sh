@@ -137,6 +137,8 @@ then
     # When github is tagged with a release, then github action release workflow
     # will set the release tag in env RELEASE_TAG
     VERSION="${RELEASE_TAG}"
+    echo "version is ${VERSION}"
+    echo "release tag is ${RELEASE_TAG}"
 fi;
 
 
