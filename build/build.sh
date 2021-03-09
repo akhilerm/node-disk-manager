@@ -138,6 +138,7 @@ then
     # will set the release tag in env RELEASE_TAG
     VERSION="${RELEASE_TAG}"
     echo "version is ${VERSION}"
+    echo "release tag is ${RELEASE_TAG}"
 fi;
 
 
