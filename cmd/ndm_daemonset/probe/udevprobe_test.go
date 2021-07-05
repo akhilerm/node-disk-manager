@@ -18,11 +18,11 @@ package probe
 
 import (
 	"errors"
-	"github.com/openebs/node-disk-manager/blockdevice"
 	"sync"
 	"testing"
 
 	apis "github.com/openebs/node-disk-manager/api/v1alpha1"
+	"github.com/openebs/node-disk-manager/blockdevice"
 	"github.com/openebs/node-disk-manager/cmd/ndm_daemonset/controller"
 	libudevwrapper "github.com/openebs/node-disk-manager/pkg/udev"
 	"github.com/stretchr/testify/assert"
@@ -186,7 +186,7 @@ func TestUdevProbe(t *testing.T) {
 	}
 	probeEvent.addBlockDeviceEvent(eventDetails)
 	// Retrieve disk resource
-	uuid, _ := generateUUID(*deviceDetails)
+	uuid, ok := generateUUID(*deviceDetails)
 	cdr1, err1 := fakeController.GetBlockDevice(uuid)
 	fakeDr, err := mockOsDiskToAPI()
 	if err != nil {
@@ -197,17 +197,21 @@ func TestUdevProbe(t *testing.T) {
 	fakeDr.ObjectMeta.Labels[controller.NDMDeviceTypeKey] = "blockdevice"
 	fakeDr.ObjectMeta.Labels[controller.NDMManagedKey] = controller.TrueString
 	tests := map[string]struct {
-		actualDisk    apis.BlockDevice
+		actualDisk    *apis.BlockDevice
 		expectedDisk  apis.BlockDevice
 		actualError   error
 		expectedError error
 	}{
-		"add event for resource with 'fake-disk-uid' uuid": {actualDisk: *cdr1, expectedDisk: fakeDr, actualError: err1, expectedError: nil},
+		"add event for resource with 'fake-disk-uid' uuid": {actualDisk: cdr1, expectedDisk: fakeDr, actualError: err1, expectedError: nil},
 	}
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
-			compareBlockDevice(t, test.expectedDisk, test.actualDisk)
-			assert.Equal(t, test.expectedError, test.actualError)
+			if !ok {
+				assert.Nil(t, cdr1)
+			} else {
+				compareBlockDevice(t, test.expectedDisk, *test.actualDisk)
+				assert.Equal(t, test.expectedError, test.actualError)
+			}
 		})
 	}
 }
